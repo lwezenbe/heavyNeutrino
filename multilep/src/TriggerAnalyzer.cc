@@ -132,8 +132,8 @@ void TriggerAnalyzer::analyze(const edm::Event& iEvent){
   getResults(iEvent, triggerResults, triggersToSave, true);
   getResults(iEvent, recoResults,    filtersToSave,  false);
   reIndex = false;
-  flag["flag_badPFMuonFilter"] = *badPFMuonFilter;
-  flag["flag_badChCandFilter"] = *badChCandFilter;
+  flag["flag_badPFMuonFilter"] = !(*badPFMuonFilter);
+  flag["flag_badChCandFilter"] = !(*badChCandFilter);
 
   for(auto& combinedFlag : allFlags){
     if(combinedFlag.first.Contains("MET")) flag[combinedFlag.first] = passCombinedFlagAND(combinedFlag.first);
