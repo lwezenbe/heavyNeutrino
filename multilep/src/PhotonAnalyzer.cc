@@ -237,8 +237,8 @@ void PhotonAnalyzer::matchCategory(const pat::Photon& photon, edm::Handle<std::v
     const reco::GenParticle* matched = nullptr;
 
     for(auto& p : *genParticles){
-      if(p.status()!=1 and p.status()!=71)  continue;
-      if((p.pt()-photon.pt())/p.pt() > 0.5) continue;
+      if(p.status()!=1 and p.status()!=71)      continue;
+      if(fabs(p.pt()-photon.pt())/p.pt() > 0.5) continue;
       float myDeltaR = deltaR(p.eta(), p.phi(), photon.eta(), photon.phi());
       if(myDeltaR > 0.1 or myDeltaR > minDeltaR) continue;
       minDeltaR  = myDeltaR;
