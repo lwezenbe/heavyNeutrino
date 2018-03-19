@@ -102,7 +102,8 @@ class multilep : public edm::one::EDAnalyzer<edm::one::WatchLuminosityBlocks, ed
         edm::EDGetTokenT<std::vector<pat::Jet>>             jetSmearedToken;
         edm::EDGetTokenT<std::vector<pat::Jet>>             jetSmearedUpToken;
         edm::EDGetTokenT<std::vector<pat::Jet>>             jetSmearedDownToken;
-        edm::EDGetTokenT<edm::TriggerResults>               recoResultsToken;                            //MET filter information
+        edm::EDGetTokenT<edm::TriggerResults>               recoResultsPrimaryToken;                     //MET filter information
+        edm::EDGetTokenT<edm::TriggerResults>               recoResultsSecondaryToken;                   //MET filter information (fallback if primary is not available)
         edm::EDGetTokenT<edm::TriggerResults>               triggerToken;
         edm::EDGetTokenT<pat::PackedTriggerPrescales>       prescalesToken;
         edm::EDGetTokenT<bool>                              badPFMuonFilterToken;                        //MET filter not stored in miniAOD

@@ -123,14 +123,15 @@ bool TriggerAnalyzer::passCombinedFlagAND(TString combinedFlag){
 }
 
 void TriggerAnalyzer::analyze(const edm::Event& iEvent){
-  edm::Handle<edm::TriggerResults> recoResults;       iEvent.getByToken(multilepAnalyzer->recoResultsToken,      recoResults);
-  edm::Handle<edm::TriggerResults> triggerResults;    iEvent.getByToken(multilepAnalyzer->triggerToken,          triggerResults);
-  edm::Handle<bool> badPFMuonFilter;                  iEvent.getByToken(multilepAnalyzer->badPFMuonFilterToken,  badPFMuonFilter);
-  edm::Handle<bool> badChCandFilter;                  iEvent.getByToken(multilepAnalyzer->badChCandFilterToken,  badChCandFilter);
+  edm::Handle<edm::TriggerResults> recoResultsPrimary;   iEvent.getByToken(multilepAnalyzer->recoResultsPrimaryToken,   recoResultsPrimary);
+  edm::Handle<edm::TriggerResults> recoResultsSecondary; iEvent.getByToken(multilepAnalyzer->recoResultsSecondaryToken, recoResultsSecondary);
+  edm::Handle<edm::TriggerResults> triggerResults;       iEvent.getByToken(multilepAnalyzer->triggerToken,              triggerResults);
+  edm::Handle<bool> badPFMuonFilter;                     iEvent.getByToken(multilepAnalyzer->badPFMuonFilterToken,      badPFMuonFilter);
+  edm::Handle<bool> badChCandFilter;                     iEvent.getByToken(multilepAnalyzer->badChCandFilterToken,      badChCandFilter);
 
   // Get all flags
-  getResults(iEvent, triggerResults, triggersToSave, true);
-  getResults(iEvent, recoResults,    filtersToSave,  false);
+  getResults(iEvent, triggerResults,                                                               triggersToSave, true);
+  getResults(iEvent, recoResultsPrimary.failedToGet() ? recoResultsSecondary : recoResultsPrimary, filtersToSave,  false);
   reIndex = false;
   flag["flag_badPFMuonFilter"] = *badPFMuonFilter;
   flag["flag_badChCandFilter"] = *badChCandFilter;
