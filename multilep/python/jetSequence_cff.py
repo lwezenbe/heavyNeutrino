@@ -45,9 +45,39 @@ def addJetSequence(process, isData):
 
   #
   # Jet energy resolution, see https://twiki.cern.ch/twiki/bin/view/CMS/JetResolution#Smearing_procedures
-  # Run three times the SmeredPATJetProducer for nominal, up and down variations
+  # Run three times the SmearedPATJetProducer for nominal, up and down variations
   #
   if not isData:
+    # Set up access to JER database as it is not included in the global tag
+    # yet. The snippet is adapted from [1].  The main change is using the
+    # FileInPath extention to access the database file [2].
+    # [1] https://github.com/cms-met/cmssw/blob/8b17ab5d8b28236e2d2215449f074cceccc4f132/PhysicsTools/PatAlgos/test/corMETFromMiniAOD.py
+    # [2] https://hypernews.cern.ch/HyperNews/CMS/get/db-aligncal/58.html
+    from CondCore.DBCommon.CondDBSetup_cfi import CondDBSetup
+    process.jerDB = cms.ESSource(
+        'PoolDBESSource', CondDBSetup,
+        connect = cms.string('sqlite_fip:heavyNeutrino/multilep/data/JER/Summer16_25nsV1_80X_' + ('DATA' if isData else 'MC') + '.db'),
+        toGet = cms.VPSet(
+            cms.PSet(
+                record = cms.string('JetResolutionRcd'),
+                tag = cms.string('JR_Summer16_25nsV1_80X_' + ('DATA' if isData else 'MC') + '_PtResolution_AK4PFchs'),
+                label = cms.untracked.string('AK4PFchs_pt')
+            ),
+            cms.PSet(
+                record = cms.string('JetResolutionRcd'),
+                tag = cms.string('JR_Summer16_25nsV1_80X_' + ('DATA' if isData else 'MC') + '_PhiResolution_AK4PFchs'),
+                label = cms.untracked.string('AK4PFchs_phi')
+            ),
+            cms.PSet(
+                record = cms.string('JetResolutionScaleFactorRcd'),
+                tag = cms.string('JR_Summer16_25nsV1_80X_' + ('DATA' if isData else 'MC') + '_SF_AK4PFchs'),
+                label = cms.untracked.string('AK4PFchs')
+            ),
+        )
+    )
+    process.jerDBPreference = cms.ESPrefer('PoolDBESSource', 'jerDB')
+
+
     for (i, j) in [(0, ''), (-1, 'Down'), (1, 'Up')]:
       jetSmearing = cms.EDProducer('SmearedPATJetProducer',
             src          = cms.InputTag('selectedUpdatedPatJetsUpdatedJEC'),
