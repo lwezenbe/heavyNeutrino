@@ -139,10 +139,11 @@ unsigned GenAnalyzer::ttgEventType(const std::vector<reco::GenParticle>& genPart
     int type = 0;
     for(auto p = genParticles.cbegin(); p != genParticles.cend(); ++p){
         if(p->status()<0)         continue;
-        if(p->pdgId()!=22)        continue;                                                        // final state photon found in genparticles with generator level cuts
+        if(p->pdgId()!=22)        continue;
+        type = std::max(type, 1);                                                                 // Type 1: final state photon found in genparticles with generator level cuts
         if(p->pt()<ptCut)         continue;
         if(fabs(p->eta())>etaCut) continue;
-        type = std::max(type, 1);                                                                  // Type 1: photon from pion or other meson
+        type = std::max(type, 2);                                                                 // Type 2: photon from pion or other meson
 
         std::vector<int> decayChain;
         GenTools::setDecayChain(*p, genParticles, decayChain);
@@ -158,7 +159,6 @@ unsigned GenAnalyzer::ttgEventType(const std::vector<reco::GenParticle>& genPart
           std::cout << "\t" << GenTools::parentGluonIsIncoming(decayChain) << std::endl;
           continue;
         }
-        type = std::max(type, 2);                                                                 //Type 2: parentage cuts ok
 
         if(GenTools::getMinDeltaR(*p, genParticles) < 0.2)                              continue;
 
