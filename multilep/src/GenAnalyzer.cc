@@ -136,20 +136,18 @@ void GenAnalyzer::analyze(const edm::Event& iEvent){
  * Some event categorization in order to understand/debug/apply overlap removal for TTG <--> TTJets
  */
 unsigned GenAnalyzer::ttgEventType(const std::vector<reco::GenParticle>& genParticles, double ptCut, double etaCut) const{
-    int type = -2;
+    int type = 0;
     for(auto p = genParticles.cbegin(); p != genParticles.cend(); ++p){
         if(p->status()<0)         continue;
-        if(p->pdgId()!=22)        continue;
-        type = std::max(type, -1);                                                           // Type -1: final state photon found in genparticles with generator level cuts
+        if(p->pdgId()!=22)        continue;                                                        // final state photon found in genparticles with generator level cuts
         if(p->pt()<ptCut)         continue;
         if(fabs(p->eta())>etaCut) continue;
-        type = std::max(type, 0);                                                            // Type 0: photon from pion or other meson
+        type = std::max(type, 1);                                                                  // Type 1: photon from pion or other meson
 
         std::vector<int> decayChain;
         GenTools::setDecayChain(*p, genParticles, decayChain);
         if(*(std::max_element(std::begin(decayChain), std::end(decayChain))) > 37)      continue;
         if(*(std::min_element(std::begin(decayChain), std::end(decayChain))) < -37)     continue;
-        type = std::max(type, 1);
 
         bool fromDecayGluon = false;
         for(auto d : decayChain){
@@ -160,7 +158,7 @@ unsigned GenAnalyzer::ttgEventType(const std::vector<reco::GenParticle>& genPart
           std::cout << "\t" << GenTools::parentGluonIsIncoming(decayChain) << std::endl;
           continue;
         }
-        type = std::max(type, 2);
+        type = std::max(type, 2);                                                                 //Type 2: parentage cuts ok
 
         if(GenTools::getMinDeltaR(*p, genParticles) < 0.2)                              continue;
 
