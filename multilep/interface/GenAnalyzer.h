@@ -20,6 +20,7 @@ class GenAnalyzer {
    
     unsigned    _ttgEventType;
     unsigned    _zgEventType;
+    unsigned    _zgEventTypeOld;
 
     //generator level MET
     double   _gen_met;
@@ -35,6 +36,7 @@ class GenAnalyzer {
     int      _gen_phMomPdg[gen_nPh_max];
     bool     _gen_phIsPrompt[gen_nPh_max];
     bool     _gen_phPassParentage[gen_nPh_max];
+    bool     _gen_phParentGluonIncoming[gen_nPh_max];
     double   _gen_phMinDeltaR[gen_nPh_max];
 
     //Generator leptons

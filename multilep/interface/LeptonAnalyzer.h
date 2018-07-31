@@ -15,7 +15,6 @@
 #include "heavyNeutrino/multilep/plugins/multilep.h"
 #include "heavyNeutrino/multilep/interface/LeptonMvaHelper.h"
 #include "heavyNeutrino/multilep/interface/LeptonIdHelper.h"
-#include "heavyNeutrino/multilep/interface/GenMatching.h"
 
 //include ROOT classes
 #include "TTree.h"
@@ -120,16 +119,8 @@ class LeptonAnalyzer {
     bool _lPOGMediumWOIso[nL_max];
     bool _lPOGTightWOIso[nL_max];
 
-    bool _lIsPrompt[nL_max];                                                                          //MC-truth variables
-    int _lMatchPdgId[nL_max];
-    unsigned _lProvenance[nL_max];                                                                    
-
-
-
     multilep* multilepAnalyzer;
 
-    //void fillLeptonGenVars(const reco::GenParticle*);
-    void fillLeptonGenVars(const reco::Candidate&, GenMatching*);
     void fillLeptonKinVars(const reco::Candidate&);
     void fillLeptonImpactParameters(const pat::Electron&, const reco::Vertex&);
     void fillLeptonImpactParameters(const pat::Muon&, const reco::Vertex&);

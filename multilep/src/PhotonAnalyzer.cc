@@ -248,9 +248,9 @@ void PhotonAnalyzer::matchCategory(const pat::Photon& photon, edm::Handle<std::v
     if(matched){
       _phTTGMatchPt[_nPh]  = matched->pt();
       _phTTGMatchEta[_nPh] = matched->eta();
-      std::set<int> decayChain;
+      std::vector<int> decayChain;
       GenTools::setDecayChain(*matched, *genParticles, decayChain);
-      bool passParentage = !(*(std::max_element(std::begin(decayChain), std::end(decayChain))) > 37 or *(std::min_element(std::begin(decayChain), std::end(decayChain))) < -37); 
+      bool passParentage = decayChain.size()==0 or !(*(std::max_element(std::begin(decayChain), std::end(decayChain))) > 37 or *(std::min_element(std::begin(decayChain), std::end(decayChain))) < -37); 
       float minOtherDeltaR = GenTools::getMinDeltaR(*matched, *genParticles);
       if(matched and matched->pdgId() == 22){
         if(passParentage and minOtherDeltaR > 0.2)       _phTTGMatchCategory[_nPh] = GENUINE;

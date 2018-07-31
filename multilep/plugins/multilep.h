@@ -37,7 +37,6 @@
 #include "heavyNeutrino/multilep/interface/GenAnalyzer.h"
 #include "heavyNeutrino/multilep/interface/LheAnalyzer.h"
 #include "heavyNeutrino/multilep/interface/SUSYMassAnalyzer.h"
-#include "heavyNeutrino/multilep/interface/GenMatching.h"
 
 //
 // class declaration

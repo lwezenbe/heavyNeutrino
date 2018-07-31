@@ -2,7 +2,7 @@
 #define GenTools_H
 
 //include c++ libarary classes
-#include <set>
+#include <vector>
 
 #include "FWCore/Framework/interface/Frameworkfwd.h"
 #include "FWCore/Framework/interface/one/EDAnalyzer.h"
@@ -29,13 +29,8 @@
 namespace GenTools{
     const reco::GenParticle* getFirstMother(const reco::GenParticle&, const std::vector<reco::GenParticle>&);
     const reco::GenParticle* getMother(const reco::GenParticle&, const std::vector<reco::GenParticle>&);
-    void setDecayChain(const reco::GenParticle& gen, const std::vector<reco::GenParticle>& genParticles, std::set<int>& list);
-    bool bosonInChain(const std::set<int>&);
-    bool bBaryonInChain(const std::set<int>&);
-    bool bMesonInChain(const std::set<int>&);
-    bool cBaryonInChain(const std::set<int>&);
-    bool cMesonInChain(const std::set<int>&);
-    unsigned provenance(const reco::GenParticle&, const std::vector<reco::GenParticle>&);
+    void setDecayChain(const reco::GenParticle& gen, const std::vector<reco::GenParticle>& genParticles, std::vector<int>& list);
     double getMinDeltaR(const reco::GenParticle& p, const std::vector<reco::GenParticle>& genParticles);
+    bool parentGluonIsIncoming(std::vector<int>& list);
 }
 #endif

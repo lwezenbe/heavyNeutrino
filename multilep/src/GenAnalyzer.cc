@@ -19,6 +19,7 @@ GenAnalyzer::GenAnalyzer(const edm::ParameterSet& iConfig, multilep* multilepAna
 void GenAnalyzer::beginJob(TTree* outputTree, edm::Service<TFileService>& fs){
     outputTree->Branch("_ttgEventType",              &_ttgEventType,              "_ttgEventType/b");
     outputTree->Branch("_zgEventType",               &_zgEventType,               "_zgEventType/b");
+    outputTree->Branch("_zgEventTypeOld",            &_zgEventTypeOld,            "_zgEventTypeOld/b");
     outputTree->Branch("_gen_met",                   &_gen_met,                   "_gen_met/D");
     outputTree->Branch("_gen_metPhi",                &_gen_metPhi,                "_gen_metPhi/D");
     outputTree->Branch("_gen_nPh",                   &_gen_nPh,                   "_gen_nPh/b");
@@ -31,6 +32,7 @@ void GenAnalyzer::beginJob(TTree* outputTree, edm::Service<TFileService>& fs){
     outputTree->Branch("_gen_phIsPrompt",            &_gen_phIsPrompt,            "_gen_phIsPrompt[_gen_nPh]/O");
     outputTree->Branch("_gen_phMinDeltaR",           &_gen_phMinDeltaR,           "_gen_phMinDeltaR[_gen_nPh]/D");
     outputTree->Branch("_gen_phPassParentage",       &_gen_phPassParentage,       "_gen_phPassParentage[_gen_nPh]/O");
+    outputTree->Branch("_gen_phParentGluonIncoming", &_gen_phParentGluonIncoming, "_gen_phParentGluonIncoming[_gen_nPh]/O");
     outputTree->Branch("_gen_nL",                    &_gen_nL,                    "_gen_nL/b");
     outputTree->Branch("_gen_lPt",                   &_gen_lPt,                   "_gen_lPt[_gen_nL]/D");
     outputTree->Branch("_gen_lEta",                  &_gen_lEta,                  "_gen_lEta[_gen_nL]/D");
@@ -51,8 +53,9 @@ void GenAnalyzer::analyze(const edm::Event& iEvent){
 
     if(!genParticles.isValid()) return;
 
-    _ttgEventType = ttgEventType(*genParticles, 13., 3.0);
-    _zgEventType  = ttgEventType(*genParticles, 10., 2.6);
+    _ttgEventType   = ttgEventType(*genParticles, 13., 3.0);
+    _zgEventType    = ttgEventType(*genParticles, 15., 2.6);
+    _zgEventTypeOld = ttgEventType(*genParticles, 10., 2.6);
 
     edm::Handle<GenEventInfoProduct> genEventInfo;          iEvent.getByToken(multilepAnalyzer->genEventInfoToken, genEventInfo);
     double _weight   = genEventInfo->weight();
@@ -82,7 +85,7 @@ void GenAnalyzer::analyze(const edm::Event& iEvent){
                 _gen_lIsPrompt[_gen_nL] = (p.isPromptDecayed() || p.isPromptFinalState());
                 _gen_lMomPdg[_gen_nL]   = GenTools::getMother(p, *genParticles)->pdgId();
 
-                std::set<int> decayChain;
+                std::vector<int> decayChain;
                 GenTools::setDecayChain(p, *genParticles, decayChain);
                 _gen_lMinDeltaR[_gen_nL]     = GenTools::getMinDeltaR(p, *genParticles);
                 _gen_lPassParentage[_gen_nL] = !(*(std::max_element(std::begin(decayChain), std::end(decayChain))) > 37 or *(std::min_element(std::begin(decayChain), std::end(decayChain))) < -37);
@@ -105,9 +108,10 @@ void GenAnalyzer::analyze(const edm::Event& iEvent){
                 _gen_phIsPrompt[_gen_nPh]      = p.isPromptFinalState();
                 _gen_phMomPdg[_gen_nPh]        = GenTools::getMother(p, *genParticles)->pdgId();
                 _gen_phMinDeltaR[_gen_nPh]     = GenTools::getMinDeltaR(p, *genParticles);
-                std::set<int> decayChain;
+                std::vector<int> decayChain;
                 GenTools::setDecayChain(p, *genParticles, decayChain);
                 _gen_phPassParentage[_gen_nPh] = !(*(std::max_element(std::begin(decayChain), std::end(decayChain))) > 37 or *(std::min_element(std::begin(decayChain), std::end(decayChain))) < -37);
+                _gen_phParentGluonIncoming[_gen_nPh] = GenTools::parentGluonIsIncoming(decayChain);
                 ++_gen_nPh;
             }
         }
@@ -132,20 +136,33 @@ void GenAnalyzer::analyze(const edm::Event& iEvent){
  * Some event categorization in order to understand/debug/apply overlap removal for TTG <--> TTJets
  */
 unsigned GenAnalyzer::ttgEventType(const std::vector<reco::GenParticle>& genParticles, double ptCut, double etaCut) const{
-    int type = 0;
+    int type = -2;
     for(auto p = genParticles.cbegin(); p != genParticles.cend(); ++p){
         if(p->status()<0)         continue;
         if(p->pdgId()!=22)        continue;
-        type = std::max(type, 1);                                                            // Type 1: final state photon found in genparticles with generator level cuts
+        type = std::max(type, -1);                                                           // Type -1: final state photon found in genparticles with generator level cuts
         if(p->pt()<ptCut)         continue;
         if(fabs(p->eta())>etaCut) continue;
-        type = std::max(type, 2);                                                            // Type 2: photon from pion or other meson
+        type = std::max(type, 0);                                                            // Type 0: photon from pion or other meson
 
-        std::set<int> decayChain;
+        std::vector<int> decayChain;
         GenTools::setDecayChain(*p, genParticles, decayChain);
-        if(*(std::max_element(std::begin(decayChain), std::end(decayChain))) > 37)  continue;
-        if(*(std::min_element(std::begin(decayChain), std::end(decayChain))) < -37) continue;
-        if(GenTools::getMinDeltaR(*p, genParticles) < 0.2)                          continue;
+        if(*(std::max_element(std::begin(decayChain), std::end(decayChain))) > 37)      continue;
+        if(*(std::min_element(std::begin(decayChain), std::end(decayChain))) < -37)     continue;
+        type = std::max(type, 1);
+
+        bool fromDecayGluon = false;
+        for(auto d : decayChain){
+          if(d==21 and not GenTools::parentGluonIsIncoming(decayChain)) fromDecayGluon = true;
+        }
+        if(fromDecayGluon){
+          for(auto d : decayChain) std::cout << d << " ";
+          std::cout << "\t" << GenTools::parentGluonIsIncoming(decayChain) << std::endl;
+          continue;
+        }
+        type = std::max(type, 2);
+
+        if(GenTools::getMinDeltaR(*p, genParticles) < 0.2)                              continue;
 
         // Everything below is *signal*
         const reco::GenParticle* mom = GenTools::getMother(*p, genParticles);
