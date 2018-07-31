@@ -48,9 +48,11 @@ TriggerAnalyzer::TriggerAnalyzer(const edm::ParameterSet& iConfig, multilep* mul
                                   "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ", "HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ",
                                   "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL", "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL",
                                   "HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL"};
-    allFlags["passMET"]        = {"HLT_MET300","HLT_HT350_MET100","HLT_AllMET300","HLT_AllMET170","HLT_jet","HLT_dijet",                       // To trigger for efficiencies
-                                  "HLT_MET170_BeamHaloCleaned","HLT_MET170_BeamHaloCleaned","HLT_MET170_NotCleaned","HLT_HT800",
-                                  "HLT_HT900","HLT_dijet55met110","HLT_dijet70met120","HLT_HT600","HLT_HT475","HLT_HT350"};
+    allFlags["passMET"]        = {"HLT_PFHT350_PFMET100", "HLT_PFHT350", "HLT_PFHT475", "HLT_PFHT600",                                         // Hadronic and MET triggers for trigger efficiencies (as used in SUS-17-001)
+                                  "HLT_DiPFJetAve40", "HLT_DiPFJetAve60", "HLT_PFJet40", "HLT_PFJet60", "HLT_PFJet80", "HLT_PFJet140", 
+                                  "HLT_PFJet200", "HLT_PFJet260", "HLT_PFJet320", "HLT_PFJet400", "HLT_PFJet450", "HLT_PFJet500",
+                                  "HLT_DiCentralPFJet70_PFMET120", "HLT_DiCentralPFJet55_PFMET110", "HLT_PFHT900", "HLT_PFHT800",
+                                  "HLT_PFMET170_NotCleaned", "HLT_PFMET170_HBHECleaned", "HLT_PFMET170_BeamHaloCleaned","HLT_PFMET300"},
     allFlags["passTTG_ee"]     = {"HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", "HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",                    // TTG e (same as in SUS-17-001)
                                   "HLT_DoubleEle33_CaloIdL_GsfTrkIdVL", "HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW"};
     allFlags["passTTG_e"]      = {"HLT_Ele105_CaloIdVT_GsfTrkIdT", "HLT_Ele115_CaloIdVT_GsfTrkIdT"};                                           // TTG e
