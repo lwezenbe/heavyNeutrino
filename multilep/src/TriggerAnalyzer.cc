@@ -48,21 +48,20 @@ TriggerAnalyzer::TriggerAnalyzer(const edm::ParameterSet& iConfig, multilep* mul
                                   "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ", "HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ",
                                   "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL", "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL",
                                   "HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL"};
-    allFlags["passMET"]        = {"HLT_PFHT350_PFMET100", "HLT_PFHT350", "HLT_PFHT475", "HLT_PFHT600",                                         // Hadronic and MET triggers for trigger efficiencies (as used in SUS-17-001)
-                                  "HLT_DiPFJetAve40", "HLT_DiPFJetAve60", "HLT_PFJet40", "HLT_PFJet60", "HLT_PFJet80", "HLT_PFJet140", 
-                                  "HLT_PFJet200", "HLT_PFJet260", "HLT_PFJet320", "HLT_PFJet400", "HLT_PFJet450", "HLT_PFJet500",
-                                  "HLT_DiCentralPFJet70_PFMET120", "HLT_DiCentralPFJet55_PFMET110", "HLT_PFHT900", "HLT_PFHT800",
-                                  "HLT_PFMET170_NotCleaned", "HLT_PFMET170_HBHECleaned", "HLT_PFMET170_BeamHaloCleaned","HLT_PFMET300"},
+    allFlags["passMET"]        = {"HLT_MET200", "HLT_MET250", "HLT_MET300", "HLT_MET600", "HLT_MET700", "HLT_PFMET300", "HLT_PFMET400",
+                                  "HLT_PFMET500", "HLT_PFMET600", "HLT_PFMET170_HBHECleaned"};
     allFlags["passTTG_ee"]     = {"HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", "HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",                    // TTG e (same as in SUS-17-001)
                                   "HLT_DoubleEle33_CaloIdL_GsfTrkIdVL", "HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW"};
-    allFlags["passTTG_e"]      = {"HLT_Ele105_CaloIdVT_GsfTrkIdT", "HLT_Ele115_CaloIdVT_GsfTrkIdT"};                                           // TTG e
+    allFlags["passTTGOld_e"]   = {"HLT_Ele105_CaloIdVT_GsfTrkIdT", "HLT_Ele115_CaloIdVT_GsfTrkIdT"};                                           // TTG e
     allFlags["passTTG_mm"]     = {"HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL", "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL_DZ", "HLT_Mu30_TkMu11",                // TTG mm
                                   "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL", "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ"};
-    allFlags["passTTG_m"]      = {"HLT_Mu50", "HLT_TkMu50", "HLT_Mu45_eta2p1"};                                                                // TTG m
+    allFlags["passTTGOld_m"]   = {"HLT_Mu50", "HLT_TkMu50", "HLT_Mu45_eta2p1"};                                                                // TTG m
     allFlags["passTTG_em"]     = {"HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL", "HLT_Mu23_TrkIsoVVL_Ele8_CaloIdL_TrackIdL_IsoVL_DZ",       // TTG em
                                   "HLT_Mu23_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL", "HLT_Mu17_TrkIsoVVL_Ele12_CaloIdL_TrackIdL_IsoVL",
                                   "HLT_Mu8_TrkIsoVVL_Ele17_CaloIdL_TrackIdL_IsoVL", "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL",
-                                  "HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL"};
+                                  "HLT_Mu8_TrkIsoVVL_Ele23_CaloIdL_TrackIdL_IsoVL_DZ", "HLT_Mu30_Ele30_CaloIdL_GsfTrkIdVL"};
+    allFlags["passTTG_e"]      = {"HLT_Ele27_WPTight_Gsf", "HLT_Ele105_CaloIdVT_GsfTrkIdT", "HLT_Ele115_CaloIdVT_GsfTrkIdT"};                  // TTG e
+    allFlags["passTTG_m"]      = {"HLT_IsoMu24", "HLT_IsoTkMu24", "HLT_Mu50", "HLT_TkMu50", "HLT_Mu45_eta2p1"};                                // TTG m
   }
 };
 
