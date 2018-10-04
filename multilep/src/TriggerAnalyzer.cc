@@ -48,8 +48,9 @@ TriggerAnalyzer::TriggerAnalyzer(const edm::ParameterSet& iConfig, multilep* mul
                                   "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ", "HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL_DZ",
                                   "HLT_Mu17_TrkIsoVVL_Mu8_TrkIsoVVL", "HLT_Mu17_TrkIsoVVL_TkMu8_TrkIsoVVL",
                                   "HLT_TkMu17_TrkIsoVVL_TkMu8_TrkIsoVVL"};
-    allFlags["passMET"]        = {"HLT_MET200", "HLT_MET250", "HLT_MET300", "HLT_MET600", "HLT_MET700", "HLT_PFMET300", "HLT_PFMET400",
-                                  "HLT_PFMET500", "HLT_PFMET600", "HLT_PFMET170_HBHECleaned"};
+    allFlags["passTTG_cross"]  = {"HLT_MET200", "HLT_MET250", "HLT_MET300", "HLT_MET600", "HLT_MET700", "HLT_PFMET300", "HLT_PFMET400",        // MET cross triggers
+                                  "HLT_PFMET500", "HLT_PFMET600", "HLT_PFMET170_HBHECleaned", "HLT_PFMET170_HBHE_BeamHaloCleaned",
+                                  "HLT_PFMET120_PFMHT120_IDTight"};
     allFlags["passTTG_ee"]     = {"HLT_Ele23_Ele12_CaloIdL_TrackIdL_IsoVL_DZ", "HLT_Ele17_Ele12_CaloIdL_TrackIdL_IsoVL_DZ",                    // TTG e (same as in SUS-17-001)
                                   "HLT_DoubleEle33_CaloIdL_GsfTrkIdVL", "HLT_DoubleEle33_CaloIdL_GsfTrkIdVL_MW"};
     allFlags["passTTGOld_e"]   = {"HLT_Ele105_CaloIdVT_GsfTrkIdT", "HLT_Ele115_CaloIdVT_GsfTrkIdT"};                                           // TTG e
